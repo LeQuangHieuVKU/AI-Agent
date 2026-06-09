@@ -11,9 +11,14 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  useKindeBrowserClient,
+  LogoutLink,
+} from "@kinde-oss/kinde-auth-nextjs";
 const Header = () => {
   const { theme, setTheme } = useTheme();
   const isDark = theme === "dark";
+  const { user } = useKindeBrowserClient();
 
   return (
     <div className="border-b border-border bg-background">
@@ -45,14 +50,22 @@ const Header = () => {
           <DropdownMenu>
             <DropdownMenuTrigger>
               <Avatar className="size-8 shrink-0 rounded-full">
-                <AvatarImage src="" />
-                <AvatarFallback className="rounded-full">TE</AvatarFallback>
+                <AvatarImage
+                  src={user?.picture || ""}
+                  alt={user?.given_name || ""}
+                />
+                <AvatarFallback className="rounded-full">
+                  {user?.given_name?.charAt(0)}
+                  {user?.family_name?.charAt(0)}
+                </AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-40">
               <DropdownMenuItem>
-                <LogOutIcon className="h-4 w-4" />
-                <span>Logout</span>
+                <LogoutLink className="w-full flex items-center gap-1">
+                  <LogOutIcon className="h-4 w-4" />
+                  <span>Logout</span>
+                </LogoutLink>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
