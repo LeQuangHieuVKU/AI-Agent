@@ -30,14 +30,10 @@ const Page = () => {
               Build a chat agent workflow with custom logic and tools
             </p>
           </div>
-          <Button>
-            <PlusIcon size={18} />
-            New Workflow
-          </Button>
           <CreateWorkflowDialog />
         </div>
 
-        <div className="">
+        <div>
           {isPending ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl-grid-cols-4 gap-4">
               {Array.from({ length: 8 }).map((_, index) => (
@@ -49,7 +45,7 @@ const Page = () => {
               {workflows.map((workflow) => (
                 <Card
                   key={workflow.id}
-                  onClick={() => router.push(`/workflow/$(workflow.id)`)}
+                  onClick={() => router.push(`/workflow/${workflow.id}`)}
                   className="cursor-pointer py-5"
                 >
                   <CardContent className="space-y-5">

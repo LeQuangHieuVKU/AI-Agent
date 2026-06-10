@@ -5,10 +5,17 @@ import axios from "axios";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Workflow } from "@/lib/generated/prisma/client";
+import { encodeAsync } from "zod";
 
 type CreateWorkflowPayload = {
   name: string;
   description?: string;
+};
+
+type WorkflowType = {
+  id: string;
+  name: string;
+  flowObject: any;
 };
 
 export const useGetWorkflows = () => {
@@ -37,5 +44,17 @@ export const useCreateWorkflow = () => {
       console.error("Error creating workflow:", error);
       toast.error("Failed to create workflow");
     },
+  });
+};
+
+export const useGetWorkflowById = (wordflowId: string) => {
+  return useQuery({
+    queryKey: ["workflows", wordflowId],
+    queryFn: async () => {
+      return await axios
+        .get<{ data: WorkflowType }>(`/api/workflow/${wordflowId}`)
+        .then((res) => res.data.data);
+    },
+    enabled: !!wordflowId,
   });
 };
