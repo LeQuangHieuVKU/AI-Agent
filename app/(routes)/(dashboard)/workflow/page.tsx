@@ -20,6 +20,9 @@ const Page = () => {
   const router = useRouter();
   const { data, isPending } = useGetWorkflows();
   const workflows = data || [];
+  if (!workflows && !isPending) {
+    return <div>Workflow not found</div>;
+  }
   return (
     <div className="min-h-auto">
       <div className="py-4">
