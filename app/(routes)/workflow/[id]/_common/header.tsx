@@ -3,7 +3,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { ChevronLeft, Code2, MoreHorizontal, Pencil, Play } from "lucide-react";
 import React from "react";
-import { useWorkflow } from "@/context/workflow-conext";
+import { useWorkflow } from "@/context/workflow-context";
 
 type PropsType = {
   isLoading: boolean;

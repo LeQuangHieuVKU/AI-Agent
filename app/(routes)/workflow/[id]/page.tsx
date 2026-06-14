@@ -4,7 +4,7 @@ import { useParams } from "next/navigation";
 import { useGetWorkflowById } from "@/features/use-workflow";
 import Header from "./_common/header";
 import { Spinner } from "@/components/ui/spinner";
-import { WorkflowProvider } from "@/context/workflow-conext";
+import { WorkflowProvider } from "@/context/workflow-context";
 import WorkflowCanvas from "./_common/workflow-canvas";
 import { ReactFlowProvider } from "@xyflow/react";
 

@@ -1,5 +1,13 @@
-import { FileIcon, GitBranch, Globe, MousePointer2Icon, Play, Square } from "lucide-react";
+import {
+  FileIcon,
+  GitBranch,
+  Globe,
+  MousePointer2Icon,
+  Play,
+  Square,
+} from "lucide-react";
 import { generateId } from "../helper";
+import { MODELS } from "./constants";
 
 export const NodeTypeEnum = {
   START: "start",
@@ -19,8 +27,8 @@ type NodeConfigBase = {
   color: string;
 
   //
-  //inputs: Record<string, any>;
-  //outputs: string[];
+  inputs: Record<string, any>;
+  outputs: string[];
 };
 
 export const NODE_CONFIG: Record<NodeType, NodeConfigBase> = {
@@ -29,6 +37,10 @@ export const NODE_CONFIG: Record<NodeType, NodeConfigBase> = {
     label: "Start",
     icon: Play,
     color: "bg-emerald-500",
+    inputs: {
+      inputValue: "",
+    },
+    outputs: ["input"], // startId.input
   },
 
   [NodeTypeEnum.AGENT]: {
@@ -36,6 +48,15 @@ export const NODE_CONFIG: Record<NodeType, NodeConfigBase> = {
     label: "Agent",
     icon: MousePointer2Icon,
     color: "bg-blue-500",
+    inputs: {
+      label: "Agent",
+      instructions: "",
+      model: MODELS[0].value,
+      tools: [],
+      outputFormat: "text", // text or json
+      responseSchema: null,
+    },
+    outputs: ["output.text"], // agentId.output.text =return item
   },
 
   [NodeTypeEnum.IF_ELSE]: {
@@ -43,6 +64,17 @@ export const NODE_CONFIG: Record<NodeType, NodeConfigBase> = {
     label: "If-Else",
     icon: GitBranch,
     color: "bg-orange-500",
+    inputs: {
+      conditions: [
+        {
+          caseName: "",
+          variable: "",
+          operator: "",
+          value: "",
+        },
+      ],
+    },
+    outputs: ["output.result"], // ifelseId.output.result = true or false
   },
 
   [NodeTypeEnum.HTTP]: {
@@ -50,20 +82,35 @@ export const NODE_CONFIG: Record<NodeType, NodeConfigBase> = {
     label: "HTTP",
     icon: Globe,
     color: "bg-blue-500",
+    inputs: {
+      method: "GET",
+      url: "",
+      headers: {},
+      body: {},
+    },
+    outputs: ["output.body"], // httpId.output = response
   },
   [NodeTypeEnum.COMMENT]: {
     type: NodeTypeEnum.COMMENT,
     label: "Note",
     icon: FileIcon,
     color: "bg-gray-500",
+    inputs: {
+      comment: "",
+    },
+    outputs: [], // comment node has no output
   },
   [NodeTypeEnum.END]: {
     type: NodeTypeEnum.END,
     label: "End",
     icon: Square,
     color: "bg-red-400",
+    inputs: {
+      value: "",
+    },
+    outputs: ["output.text"], // end node has no output
   },
-};
+} as const;
 
 export const getNodeConfig = (type: NodeType) => {
   const nodetype = NODE_CONFIG[type];
@@ -95,7 +142,8 @@ export function createNode({
     data: {
       label: config.label,
       color: config.color,
-      //...input
+      outputs: config.outputs,
+      ...config.inputs,
     },
   };
 }
